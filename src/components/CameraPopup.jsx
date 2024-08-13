@@ -6,27 +6,41 @@ const CameraPopup = ({ isOpen, onClose }) => {
   const popupRef = useRef(null);
   const webcamRef = useRef(null);
   const [image, setImage] = useState(null);
-  const [orientation, setOrientation] = useState('portrait');
+  const [videoStyle, setVideoStyle] = useState({});
 
   const capture = () => {
     const imageSrc = webcamRef.current.getScreenshot();
     setImage(imageSrc);
   };
 
-  const handleResize = () => {
-    if (window.innerHeight > window.innerWidth) {
-      setOrientation('portrait');
-    } else {
-      setOrientation('landscape');
+  const updateVideoStyle = () => {
+    const orientation = window.orientation || 0;
+
+    let style = {
+      transform: 'rotate(0deg)', // Default rotation
+      width: '120%',
+      height: 'auto',
+    };
+
+    if (orientation === 90 || orientation === -90) {
+      // Landscape
+      style.transform = 'rotate(90deg)';
+    } else if (orientation === 180 || orientation === -180) {
+      // Upside Down
+      style.transform = 'rotate(180deg)';
     }
+
+    setVideoStyle(style);
   };
 
   useEffect(() => {
-    handleResize(); // Set initial orientation
-    window.addEventListener('resize', handleResize); // Update orientation on resize
+    updateVideoStyle(); // Set initial style
+    window.addEventListener('orientationchange', updateVideoStyle); // Update style on orientation change
+    window.addEventListener('resize', updateVideoStyle); // Update style on resize
 
     return () => {
-      window.removeEventListener('resize', handleResize); // Clean up event listener
+      window.removeEventListener('orientationchange', updateVideoStyle); // Clean up event listener
+      window.removeEventListener('resize', updateVideoStyle); // Clean up event listener
     };
   }, []);
 
@@ -48,21 +62,6 @@ const CameraPopup = ({ isOpen, onClose }) => {
     }
   }, [isOpen]);
 
-  // Define styles based on orientation
-  const videoStyles = {
-    portrait: {
-      height: 'auto',
-      transform: 'rotate(180deg)',
-    },
-    landscape: {
-      height: 'auto',
-      transform: 'rotate(180deg)',
-    },
-  };
-
-  // Apply styles based on current orientation
-  const currentVideoStyle = orientation === 'landscape' ? videoStyles.landscape : videoStyles.portrait;
-
   if (!isOpen) return null;
 
   return (
@@ -74,7 +73,7 @@ const CameraPopup = ({ isOpen, onClose }) => {
             ref={webcamRef}
             screenshotFormat="image/jpeg"
             className="webcam"
-            style={currentVideoStyle}
+            style={videoStyle}
           />
         ) : (
           <img src={image} alt="Captured selfie" className="captured-image" />
