@@ -25,28 +25,19 @@
 .webcam {
   width: 100%;
   height: auto;
-  max-height: 80%;
+  max-height: 100%;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transform-origin: center;
   transform: rotate(0deg);
 }
 
-.captured-image {
-  width: 100%;
-  height: auto;
-  max-height: 80%;
-  border-radius: 10px;
-  transform: rotate(0deg);
+.portrait .webcam {
+  transform: rotate(0deg); /* No rotation needed for portrait */
 }
 
-.portrait .webcam,
-.portrait .captured-image {
-  transform: rotate(0deg);
-}
-
-.landscape .webcam,
-.landscape .captured-image {
-  transform: rotate(-90deg);
+.landscape .webcam {
+  transform: rotate(-90deg); /* Rotate the video feed for landscape */
 }
 
 .controls {

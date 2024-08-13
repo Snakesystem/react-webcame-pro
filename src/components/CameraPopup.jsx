@@ -5,16 +5,25 @@ import './CameraPopup.scss';
 const CameraPopup = ({ isOpen, onClose }) => {
   const popupRef = useRef(null);
   const webcamRef = useRef(null);
-  const [image, setImage] = useState(null);
   const [orientation, setOrientation] = useState(window.innerWidth > window.innerHeight ? 'landscape' : 'portrait');
 
-  const capture = () => {
-    const imageSrc = webcamRef.current.getScreenshot();
-    setImage(imageSrc);
+  const handleResize = () => {
+    setOrientation(window.innerWidth > window.innerHeight ? 'landscape' : 'portrait');
   };
 
-  const enterFullscreen = () => {
-    if (popupRef.current) {
+  useEffect(() => {
+    if (isOpen) {
+      handleResize();
+    }
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (isOpen && popupRef.current) {
       if (popupRef.current.requestFullscreen) {
         popupRef.current.requestFullscreen();
       } else if (popupRef.current.mozRequestFullScreen) { // Firefox
@@ -25,49 +34,23 @@ const CameraPopup = ({ isOpen, onClose }) => {
         popupRef.current.msRequestFullscreen();
       }
     }
-  };
-
-  useEffect(() => {
-    if (isOpen) {
-      enterFullscreen();
-    } else {
-      document.exitFullscreen();
-    }
-  }, [isOpen]);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setOrientation(window.innerWidth > window.innerHeight ? 'landscape' : 'portrait');
-    };
-
-    window.addEventListener('resize', handleResize);
-
     return () => {
-      window.removeEventListener('resize', handleResize);
+      document.exitFullscreen();
     };
-  }, []);
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
   return (
     <div className="camera-popup" ref={popupRef}>
       <div className={`popup-content ${orientation}`}>
-        {!image ? (
-          <Webcam
-            audio={false}
-            ref={webcamRef}
-            screenshotFormat="image/jpeg"
-            className={`webcam ${orientation}`}
-          />
-        ) : (
-          <img src={image} alt="Captured selfie" className={`captured-image ${orientation}`} />
-        )}
+        <Webcam
+          audio={false}
+          ref={webcamRef}
+          screenshotFormat="image/jpeg"
+          className={`webcam ${orientation}`}
+        />
         <div className="controls">
-          {!image ? (
-            <button onClick={capture} className="btn btn-primary">Capture</button>
-          ) : (
-            <button onClick={() => setImage(null)} className="btn btn-secondary">Retake</button>
-          )}
           <button onClick={onClose} className="btn btn-danger">Close</button>
         </div>
       </div>
