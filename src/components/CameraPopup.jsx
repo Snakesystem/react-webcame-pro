@@ -8,25 +8,27 @@ const CameraPopup = ({ isOpen, onClose }) => {
 
   useEffect(() => {
     if (isOpen) {
-      if (popupRef.current) {
-        if (popupRef.current.requestFullscreen) {
-          popupRef.current.requestFullscreen();
-        } else if (popupRef.current.mozRequestFullScreen) { // Firefox
-          popupRef.current.mozRequestFullScreen();
-        } else if (popupRef.current.webkitRequestFullscreen) { // Chrome, Safari, Opera
-          popupRef.current.webkitRequestFullscreen();
-        } else if (popupRef.current.msRequestFullscreen) { // IE/Edge
-          popupRef.current.msRequestFullscreen();
+      // Request fullscreen
+      const enterFullscreen = () => {
+        if (popupRef.current) {
+          if (popupRef.current.requestFullscreen) {
+            popupRef.current.requestFullscreen();
+          } else if (popupRef.current.mozRequestFullScreen) { // Firefox
+            popupRef.current.mozRequestFullScreen();
+          } else if (popupRef.current.webkitRequestFullscreen) { // Chrome, Safari, Opera
+            popupRef.current.webkitRequestFullscreen();
+          } else if (popupRef.current.msRequestFullscreen) { // IE/Edge
+            popupRef.current.msRequestFullscreen();
+          }
         }
-      }
+      };
 
+      enterFullscreen();
+      
       // Handle device orientation
       const handleOrientation = () => {
         if (webcamRef.current) {
-          const orientation = window.screen.orientation || window.screen.mozOrientation || window.screen.msOrientation;
-          const angle = orientation ? orientation.angle : 0;
-
-          // Apply rotation based on device orientation
+          const angle = window.orientation || 0;
           webcamRef.current.style.transform = `rotate(${angle}deg)`;
         }
       };
@@ -42,6 +44,25 @@ const CameraPopup = ({ isOpen, onClose }) => {
       };
     }
   }, [isOpen]);
+
+  useEffect(() => {
+    const handleOrientation = () => {
+      if (webcamRef.current) {
+        const angle = window.orientation || 0;
+        webcamRef.current.style.transform = `rotate(${angle}deg)`;
+      }
+    };
+  
+    handleOrientation();
+    window.addEventListener('orientationchange', handleOrientation);
+    window.addEventListener('resize', handleOrientation);
+  
+    return () => {
+      window.removeEventListener('orientationchange', handleOrientation);
+      window.removeEventListener('resize', handleOrientation);
+    };
+  }, []);
+  
 
   if (!isOpen) return null;
 
