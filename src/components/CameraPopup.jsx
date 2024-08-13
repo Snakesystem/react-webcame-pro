@@ -12,37 +12,6 @@ const CameraPopup = ({ isOpen, onClose }) => {
     setImage(imageSrc);
   };
 
-  const enterFullscreen = () => {
-    if (popupRef.current) {
-      if (popupRef.current.requestFullscreen) {
-        popupRef.current.requestFullscreen();
-      } else if (popupRef.current.mozRequestFullScreen) { // Firefox
-        popupRef.current.mozRequestFullScreen();
-      } else if (popupRef.current.webkitRequestFullscreen) { // Chrome, Safari and Opera
-        popupRef.current.webkitRequestFullscreen();
-      } else if (popupRef.current.msRequestFullscreen) { // IE/Edge
-        popupRef.current.msRequestFullscreen();
-      }
-    }
-  };
-
-  useEffect(() => {
-    if (isOpen) {
-      enterFullscreen();
-    } else {
-      document.exitFullscreen();
-    }
-  }, [isOpen]);
-
-  useEffect(() => {
-    // Cleanup fullscreen on unmount
-    return () => {
-      if (document.fullscreenElement) {
-        document.exitFullscreen();
-      }
-    };
-  }, []);
-
   if (!isOpen) return null;
 
   return (
