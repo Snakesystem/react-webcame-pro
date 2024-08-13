@@ -5,36 +5,34 @@ import './CameraPopup.scss';
 const CameraPopup = ({ isOpen, onClose }) => {
   const popupRef = useRef(null);
   const webcamRef = useRef(null);
-  const [orientation, setOrientation] = useState(window.innerWidth > window.innerHeight ? 'landscape' : 'portrait');
+  const [orientation, setOrientation] = useState('portrait');
 
-  const handleResize = () => {
-    setOrientation(window.innerWidth > window.innerHeight ? 'landscape' : 'portrait');
+  const handleOrientationChange = () => {
+    const angle = window.screen.orientation.angle;
+    setOrientation(angle === 0 || angle === 180 ? 'portrait' : 'landscape');
   };
 
   useEffect(() => {
     if (isOpen) {
-      handleResize();
-    }
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, [isOpen]);
-
-  useEffect(() => {
-    if (isOpen && popupRef.current) {
-      if (popupRef.current.requestFullscreen) {
-        popupRef.current.requestFullscreen();
-      } else if (popupRef.current.mozRequestFullScreen) { // Firefox
-        popupRef.current.mozRequestFullScreen();
-      } else if (popupRef.current.webkitRequestFullscreen) { // Chrome, Safari and Opera
-        popupRef.current.webkitRequestFullscreen();
-      } else if (popupRef.current.msRequestFullscreen) { // IE/Edge
-        popupRef.current.msRequestFullscreen();
+      handleOrientationChange();
+      window.addEventListener('orientationchange', handleOrientationChange);
+      window.addEventListener('resize', handleOrientationChange);
+      
+      if (popupRef.current) {
+        if (popupRef.current.requestFullscreen) {
+          popupRef.current.requestFullscreen();
+        } else if (popupRef.current.mozRequestFullScreen) { // Firefox
+          popupRef.current.mozRequestFullScreen();
+        } else if (popupRef.current.webkitRequestFullscreen) { // Chrome, Safari, Opera
+          popupRef.current.webkitRequestFullscreen();
+        } else if (popupRef.current.msRequestFullscreen) { // IE/Edge
+          popupRef.current.msRequestFullscreen();
+        }
       }
     }
     return () => {
+      window.removeEventListener('orientationchange', handleOrientationChange);
+      window.removeEventListener('resize', handleOrientationChange);
       document.exitFullscreen();
     };
   }, [isOpen]);
@@ -43,7 +41,7 @@ const CameraPopup = ({ isOpen, onClose }) => {
 
   return (
     <div className="camera-popup" ref={popupRef}>
-      <div className={`popup-content ${orientation}`}>
+      <div className="popup-content">
         <Webcam
           audio={false}
           ref={webcamRef}

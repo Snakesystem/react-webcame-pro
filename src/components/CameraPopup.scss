@@ -28,25 +28,15 @@
   max-height: 100%;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  transform: rotate(0deg);
+  transform-origin: center;
 }
 
-/* Mobile specific styles */
-@media (max-width: 767px) {
-  .popup-content.portrait .webcam {
-    transform: rotate(0deg); /* Portrait mode: no rotation */
-  }
-
-  .popup-content.landscape .webcam {
-    transform: rotate(90deg); /* Landscape mode: rotate -90 degrees */
-  }
+.portrait.webcam {
+  transform: rotate(0deg); /* Portrait mode: no rotation */
 }
 
-/* Default styles for larger screens (desktop) */
-@media (min-width: 768px) {
-  .webcam {
-    /* Default desktop styles without rotation */
-  }
+.landscape.webcam {
+  transform: rotate(-90deg); /* Landscape mode: rotate -90 degrees */
 }
 
 .controls {
