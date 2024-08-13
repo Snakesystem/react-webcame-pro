@@ -6,11 +6,29 @@ const CameraPopup = ({ isOpen, onClose }) => {
   const popupRef = useRef(null);
   const webcamRef = useRef(null);
   const [image, setImage] = useState(null);
+  const [orientation, setOrientation] = useState('portrait');
 
   const capture = () => {
     const imageSrc = webcamRef.current.getScreenshot();
     setImage(imageSrc);
   };
+
+  const handleResize = () => {
+    if (window.innerHeight > window.innerWidth) {
+      setOrientation('portrait');
+    } else {
+      setOrientation('landscape');
+    }
+  };
+
+  useEffect(() => {
+    handleResize(); // Set initial orientation
+    window.addEventListener('resize', handleResize); // Update orientation on resize
+
+    return () => {
+      window.removeEventListener('resize', handleResize); // Clean up event listener
+    };
+  }, []);
 
   useEffect(() => {
     if (isOpen) {
@@ -30,6 +48,23 @@ const CameraPopup = ({ isOpen, onClose }) => {
     }
   }, [isOpen]);
 
+  // Define styles based on orientation
+  const videoStyles = {
+    portrait: {
+      width: '120%',
+      height: 'auto',
+      transform: 'translate(-50%, -50%) scale(1.2)',
+    },
+    landscape: {
+      width: '150%',
+      height: 'auto',
+      transform: 'translate(-50%, -50%) scale(1.5)',
+    },
+  };
+
+  // Apply styles based on current orientation
+  const currentVideoStyle = orientation === 'landscape' ? videoStyles.landscape : videoStyles.portrait;
+
   if (!isOpen) return null;
 
   return (
@@ -41,6 +76,7 @@ const CameraPopup = ({ isOpen, onClose }) => {
             ref={webcamRef}
             screenshotFormat="image/jpeg"
             className="webcam"
+            style={currentVideoStyle}
           />
         ) : (
           <img src={image} alt="Captured selfie" className="captured-image" />
