@@ -22,16 +22,16 @@
   align-items: center;
 }
 
-video {
-  width: 120%; /* Zoom out by increasing width */
-  height: auto;
-  object-fit: cover;
-  transform-origin: center center;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(1.2); /* Center video and apply zoom out */
-}
+// video {
+//   width: 120%; /* Zoom out by increasing width */
+//   height: auto;
+//   object-fit: cover;
+//   transform-origin: center center;
+//   position: absolute;
+//   top: 50%;
+//   left: 50%;
+//   transform: translate(-50%, -50%) scale(1.2); /* Center video and apply zoom out */
+// }
 
 .captured-image {
   width: 100%;
