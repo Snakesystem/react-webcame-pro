@@ -34,11 +34,11 @@
 /* Mobile specific styles */
 @media (max-width: 767px) {
   .popup-content.portrait .webcam {
-    transform: rotate(0deg); /* Portrait mode: no rotation */
+    transform: rotate(90deg); /* Portrait mode: no rotation */
   }
 
   .popup-content.landscape .webcam {
-    transform: rotate(-90deg); /* Landscape mode: rotate -90 degrees */
+    transform: rotate(90deg); /* Landscape mode: rotate -90 degrees */
   }
 }
 
