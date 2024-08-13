@@ -22,11 +22,13 @@
   align-items: center;
   
   &.portrait .webcam {
-    transform: none;
+    transform: none; /* No rotation for portrait mode */
+    width: 100%;
+    height: auto;
   }
 
   &.landscape .webcam {
-    transform: rotate(-90deg); /* Adjust the rotation for landscape mode */
+    transform: rotate(-90deg); /* Rotate video for landscape mode */
     transform-origin: center;
     width: 100vh; /* Adjust width to match viewport height */
     height: 100vw; /* Adjust height to match viewport width */
@@ -34,9 +36,6 @@
 }
 
 .webcam {
-  width: 100%;
-  height: auto;
-  max-height: 80%;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }

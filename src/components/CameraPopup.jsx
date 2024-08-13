@@ -58,7 +58,7 @@ const CameraPopup = ({ isOpen, onClose }) => {
             audio={false}
             ref={webcamRef}
             screenshotFormat="image/jpeg"
-            className="webcam"
+            className={`webcam ${orientation}`}
           />
         ) : (
           <img src={image} alt="Captured selfie" className="captured-image" />
