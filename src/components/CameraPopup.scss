@@ -28,10 +28,15 @@
   max-height: 80%;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  object-fit: cover;
 
-  // Fixing rotation issues for mobile devices
-  transform: rotate(0deg); // Default rotation
-  transform-origin: center;
+  // Handling rotation based on device orientation
+  @media (orientation: landscape) {
+    transform: rotate(-90deg); /* Rotate the video if in landscape mode */
+    transform-origin: left top; /* Adjust origin for proper alignment */
+    width: 100vh; /* Adjust width to match viewport height */
+    height: 100vw; /* Adjust height to match viewport width */
+  }
 }
 
 .captured-image {
@@ -45,4 +50,25 @@
   margin-top: 20px;
   display: flex;
   gap: 10px;
+
+  .btn {
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+
+    &.btn-primary {
+      background-color: #007bff;
+    }
+
+    &.btn-secondary {
+      background-color: #6c757d;
+    }
+
+    &.btn-danger {
+      background-color: #dc3545;
+    }
+  }
 }
