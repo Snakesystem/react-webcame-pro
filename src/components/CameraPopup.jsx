@@ -51,14 +51,12 @@ const CameraPopup = ({ isOpen, onClose }) => {
   // Define styles based on orientation
   const videoStyles = {
     portrait: {
-      width: '120%',
       height: 'auto',
-      transform: 'translate(-50%, -50%) scale(1.2)',
+      transform: 'rotate(180deg)',
     },
     landscape: {
-      width: '150%',
       height: 'auto',
-      transform: 'translate(-50%, -50%) scale(1.5)',
+      transform: 'rotate(180deg)',
     },
   };
 
