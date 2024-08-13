@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import CameraPopup from './components/CameraPopup';
+import Camera from './gemini/Camera';
 
 function App() {
   const [isCameraOpen, setIsCameraOpen] = useState(false);
@@ -10,8 +11,8 @@ function App() {
   return (
     <div className="App">
       <h1>Selfie Capture App</h1>
-      <button onClick={openCamera} className="btn btn-primary">Open Camera</button>
-      <CameraPopup isOpen={isCameraOpen} onClose={closeCamera} />
+      {/* <button onClick={takeScreenshot}>Capture</button> */}
+      <Camera/>
     </div>
   );
 }
