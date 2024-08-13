@@ -14,20 +14,21 @@ const CameraPopup = ({ isOpen, onClose }) => {
   };
 
   const updateVideoStyle = () => {
-    const orientation = window.orientation || 0;
+    const isPortrait = window.matchMedia("(orientation: portrait)").matches;
+    const isUpsideDown = window.matchMedia("(orientation: upside-down)").matches;
 
     let style = {
       transform: 'rotate(0deg)', // Default rotation
       width: '120%',
       height: 'auto',
+      transformOrigin: 'center center',
     };
 
-    if (orientation === 90 || orientation === -90) {
+    if (isUpsideDown) {
+      style.transform = 'rotate(180deg)';
+    } else if (!isPortrait) {
       // Landscape
       style.transform = 'rotate(90deg)';
-    } else if (orientation === 180 || orientation === -180) {
-      // Upside Down
-      style.transform = 'rotate(180deg)';
     }
 
     setVideoStyle(style);
