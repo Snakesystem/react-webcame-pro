@@ -1,8 +1,9 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import Webcam from 'react-webcam';
 import './CameraPopup.scss';
 
 const CameraPopup = ({ isOpen, onClose }) => {
+  const popupRef = useRef(null);
   const webcamRef = useRef(null);
   const [image, setImage] = useState(null);
 
@@ -11,10 +12,32 @@ const CameraPopup = ({ isOpen, onClose }) => {
     setImage(imageSrc);
   };
 
+  const enterFullscreen = () => {
+    if (popupRef.current) {
+      if (popupRef.current.requestFullscreen) {
+        popupRef.current.requestFullscreen();
+      } else if (popupRef.current.mozRequestFullScreen) { // Firefox
+        popupRef.current.mozRequestFullScreen();
+      } else if (popupRef.current.webkitRequestFullscreen) { // Chrome, Safari and Opera
+        popupRef.current.webkitRequestFullscreen();
+      } else if (popupRef.current.msRequestFullscreen) { // IE/Edge
+        popupRef.current.msRequestFullscreen();
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (isOpen) {
+      enterFullscreen();
+    } else {
+      document.exitFullscreen();
+    }
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   return (
-    <div className="camera-popup">
+    <div className="camera-popup" ref={popupRef}>
       <div className="popup-content">
         {!image ? (
           <Webcam
