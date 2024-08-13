@@ -6,6 +6,7 @@ const CameraPopup = ({ isOpen, onClose }) => {
   const popupRef = useRef(null);
   const webcamRef = useRef(null);
   const [image, setImage] = useState(null);
+  const [orientation, setOrientation] = useState('portrait');
 
   const capture = () => {
     const imageSrc = webcamRef.current.getScreenshot();
@@ -13,13 +14,13 @@ const CameraPopup = ({ isOpen, onClose }) => {
   };
 
   const handleOrientationChange = () => {
-    const orientation = window.innerHeight > window.innerWidth ? 'portrait' : 'landscape';
-    document.documentElement.setAttribute('data-orientation', orientation);
+    const isPortrait = window.innerHeight > window.innerWidth;
+    setOrientation(isPortrait ? 'portrait' : 'landscape');
   };
 
   useEffect(() => {
     window.addEventListener('resize', handleOrientationChange);
-    handleOrientationChange();
+    handleOrientationChange(); // Set initial orientation
 
     return () => {
       window.removeEventListener('resize', handleOrientationChange);
@@ -55,6 +56,10 @@ const CameraPopup = ({ isOpen, onClose }) => {
             ref={webcamRef}
             screenshotFormat="image/jpeg"
             className="webcam"
+            style={{
+              transform: orientation === 'landscape' ? 'rotate(-90deg)' : 'rotate(0deg)',
+              transformOrigin: 'center center'
+            }}
           />
         ) : (
           <img src={image} alt="Captured selfie" className="captured-image" />
