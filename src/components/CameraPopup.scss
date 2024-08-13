@@ -28,16 +28,25 @@
   max-height: 100%;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  transform-origin: center;
   transform: rotate(0deg);
 }
 
-.portrait .webcam {
-  transform: rotate(0deg); /* No rotation needed for portrait */
+/* Mobile specific styles */
+@media (max-width: 767px) {
+  .popup-content.portrait .webcam {
+    transform: rotate(0deg); /* Portrait mode: no rotation */
+  }
+
+  .popup-content.landscape .webcam {
+    transform: rotate(-90deg); /* Landscape mode: rotate -90 degrees */
+  }
 }
 
-.landscape .webcam {
-  transform: rotate(-90deg); /* Rotate the video feed for landscape */
+/* Default styles for larger screens (desktop) */
+@media (min-width: 768px) {
+  .webcam {
+    /* Default desktop styles without rotation */
+  }
 }
 
 .controls {
