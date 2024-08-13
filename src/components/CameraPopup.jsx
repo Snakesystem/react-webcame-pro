@@ -57,7 +57,7 @@ const CameraPopup = ({ isOpen, onClose }) => {
             screenshotFormat="image/jpeg"
             className="webcam"
             style={{
-              transform: orientation === 'landscape' ? 'rotate(-90deg)' : 'rotate(180deg)',
+              transform: orientation === 'landscape' ? 'rotate(180deg)' : 'rotate(180deg)',
               transformOrigin: 'center center'
             }}
           />
