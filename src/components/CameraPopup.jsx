@@ -12,6 +12,24 @@ const CameraPopup = ({ isOpen, onClose }) => {
     setImage(imageSrc);
   };
 
+  useEffect(() => {
+    if (isOpen) {
+      if (popupRef.current) {
+        if (popupRef.current.requestFullscreen) {
+          popupRef.current.requestFullscreen();
+        } else if (popupRef.current.mozRequestFullScreen) { // Firefox
+          popupRef.current.mozRequestFullScreen();
+        } else if (popupRef.current.webkitRequestFullscreen) { // Chrome, Safari, Opera
+          popupRef.current.webkitRequestFullscreen();
+        } else if (popupRef.current.msRequestFullscreen) { // IE/Edge
+          popupRef.current.msRequestFullscreen();
+        }
+      }
+    } else {
+      document.exitFullscreen();
+    }
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   return (
