@@ -23,15 +23,14 @@
 }
 
 video {
-  width: 120%; /* Zoom out by increasing width */
+  width: 180%; /* Zoom out by increasing width */
   height: auto;
   object-fit: cover;
   transform-origin: center center;
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) scale(1.2); /* Center video and apply zoom out */
-  transform: rotateX('angle');
+  transform: translate(-30%, -70%) scale(1.2); /* Center video and apply zoom out */
 }
 
 .captured-image {
