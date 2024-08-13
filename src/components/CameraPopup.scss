@@ -28,6 +28,7 @@
   max-height: 80%;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transform: rotate(0deg);
 }
 
 .captured-image {
@@ -35,6 +36,17 @@
   height: auto;
   max-height: 80%;
   border-radius: 10px;
+  transform: rotate(0deg);
+}
+
+.portrait .webcam,
+.portrait .captured-image {
+  transform: rotate(0deg);
+}
+
+.landscape .webcam,
+.landscape .captured-image {
+  transform: rotate(-90deg);
 }
 
 .controls {
