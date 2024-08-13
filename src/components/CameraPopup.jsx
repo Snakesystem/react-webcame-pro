@@ -1,23 +1,13 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 import Webcam from 'react-webcam';
 import './CameraPopup.scss';
 
 const CameraPopup = ({ isOpen, onClose }) => {
   const popupRef = useRef(null);
   const webcamRef = useRef(null);
-  const [orientation, setOrientation] = useState('portrait');
-
-  const handleOrientationChange = () => {
-    const angle = window.screen.orientation.angle;
-    setOrientation(angle === 0 || angle === 180 ? 'portrait' : 'landscape');
-  };
 
   useEffect(() => {
     if (isOpen) {
-      handleOrientationChange();
-      window.addEventListener('orientationchange', handleOrientationChange);
-      window.addEventListener('resize', handleOrientationChange);
-      
       if (popupRef.current) {
         if (popupRef.current.requestFullscreen) {
           popupRef.current.requestFullscreen();
@@ -29,12 +19,28 @@ const CameraPopup = ({ isOpen, onClose }) => {
           popupRef.current.msRequestFullscreen();
         }
       }
+
+      // Handle device orientation
+      const handleOrientation = () => {
+        if (webcamRef.current) {
+          const orientation = window.screen.orientation || window.screen.mozOrientation || window.screen.msOrientation;
+          const angle = orientation ? orientation.angle : 0;
+
+          // Apply rotation based on device orientation
+          webcamRef.current.style.transform = `rotate(${angle}deg)`;
+        }
+      };
+
+      handleOrientation();
+      window.addEventListener('orientationchange', handleOrientation);
+      window.addEventListener('resize', handleOrientation);
+
+      return () => {
+        window.removeEventListener('orientationchange', handleOrientation);
+        window.removeEventListener('resize', handleOrientation);
+        document.exitFullscreen();
+      };
     }
-    return () => {
-      window.removeEventListener('orientationchange', handleOrientationChange);
-      window.removeEventListener('resize', handleOrientationChange);
-      document.exitFullscreen();
-    };
   }, [isOpen]);
 
   if (!isOpen) return null;
@@ -46,7 +52,7 @@ const CameraPopup = ({ isOpen, onClose }) => {
           audio={false}
           ref={webcamRef}
           screenshotFormat="image/jpeg"
-          className={`webcam ${orientation}`}
+          className="webcam"
         />
         <div className="controls">
           <button onClick={onClose} className="btn btn-danger">Close</button>

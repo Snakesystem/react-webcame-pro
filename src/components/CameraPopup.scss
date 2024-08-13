@@ -31,14 +31,6 @@
   transform-origin: center;
 }
 
-.portrait.webcam {
-  transform: rotate(0deg); /* Portrait mode: no rotation */
-}
-
-.landscape.webcam {
-  transform: rotate(-90deg); /* Landscape mode: rotate -90 degrees */
-}
-
 .controls {
   margin-top: 20px;
   display: flex;
