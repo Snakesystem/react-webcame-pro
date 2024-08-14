@@ -38,9 +38,6 @@ const CameraPopup = ({ isOpen, onClose }) => {
         popupRef.current.msRequestFullscreen();
       }
     }
-    if(image) {
-      alert(image)
-    }
     return () => {
       popupRef.current?.exitFullscreen?.();
     };
