@@ -5,8 +5,9 @@ import { Camera } from 'react-camera-pro';
 
 const CameraPopup = ({ isOpen, onClose }) => {
   const popupRef = useRef(null);
-  const webcamRef = useRef(null);
+  const camera = useRef(null);
   const [numberOfCameras, setNumberOfCameras] = useState(0);
+  const [image, setImage] = useState(null);
   const [activeDeviceId, setActiveDeviceId] = useState(undefined);
   const [orientation, setOrientation] = useState(window.innerWidth > window.innerHeight ? 'landscape' : 'portrait');
 
@@ -37,8 +38,11 @@ const CameraPopup = ({ isOpen, onClose }) => {
         popupRef.current.msRequestFullscreen();
       }
     }
+    if(image) {
+      alert(image)
+    }
     return () => {
-      document.exitFullscreen();
+      popupRef.current?.exitFullscreen?.();
     };
   }, [isOpen]);
 
@@ -48,7 +52,7 @@ const CameraPopup = ({ isOpen, onClose }) => {
     <div className="camera-popup" ref={popupRef}>
       <div className={`popup-content ${orientation}`}>
         <Camera
-          ref={webcamRef}
+          ref={camera}
           aspectRatio="cover"
           facingMode="user"
           numberOfCamerasCallback={setNumberOfCameras}
@@ -65,6 +69,13 @@ const CameraPopup = ({ isOpen, onClose }) => {
         />
         <div className="controls">
           <button onClick={onClose} className="btn btn-danger">Close</button>
+          <button onClick={() => {
+                if (camera.current) {
+                  const photo = camera.current.takePhoto();
+                  console.log(photo);
+                  setImage(photo);
+                }
+              }} className="btn btn-primary" >Capture</button>
         </div>
       </div>
     </div>

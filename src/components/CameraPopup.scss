@@ -34,6 +34,7 @@
   
   video {
     transform: scale(0.5);
+    z-index: -1;
   }
 
   .controls {
