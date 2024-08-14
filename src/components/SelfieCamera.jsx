@@ -50,7 +50,7 @@ const SelfieCamera = () => {
         <Camera
           ref={camera}
           aspectRatio="cover"
-          facingMode="environment"
+          facingMode="user"
           numberOfCamerasCallback={setNumberOfCameras}
           videoSourceDeviceId={activeDeviceId}
           errorMessages={{
