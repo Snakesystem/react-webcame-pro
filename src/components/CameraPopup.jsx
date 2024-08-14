@@ -1,11 +1,14 @@
 import React, { useRef, useState, useEffect } from 'react';
 import Webcam from 'react-webcam';
 import './CameraPopup.scss';
+import { Camera } from 'react-camera-pro';
 
 const CameraPopup = ({ isOpen, onClose }) => {
   const popupRef = useRef(null);
   const webcamRef = useRef(null);
   const [image, setImage] = useState(null);
+  const [numberOfCameras, setNumberOfCameras] = useState(0);
+  const [activeDeviceId, setActiveDeviceId] = useState(undefined);
 
   const capture = () => {
     const imageSrc = webcamRef.current.getScreenshot();
@@ -26,7 +29,7 @@ const CameraPopup = ({ isOpen, onClose }) => {
         }
       }
     } else {
-      document.exitFullscreen();
+      // document.exitFullscreen();
     }
   }, [isOpen]);
 
@@ -36,12 +39,22 @@ const CameraPopup = ({ isOpen, onClose }) => {
     <div className="camera-popup" ref={popupRef}>
       <div className="popup-content">
         {!image ? (
-          <Webcam
-            audio={false}
-            ref={webcamRef}
-            screenshotFormat="image/jpeg"
-            className="webcam"
-          />
+          <Camera
+            ref={popupRef}
+            aspectRatio="cover"
+            facingMode="user"
+            numberOfCamerasCallback={setNumberOfCameras}
+            videoSourceDeviceId={activeDeviceId}
+            errorMessages={{
+              noCameraAccessible: 'No camera device accessible. Please connect your camera or try a different browser.',
+              permissionDenied: 'Permission denied. Please refresh and give camera permission.',
+              switchCamera: 'It is not possible to switch camera to different one because there is only one video device accessible.',
+              canvas: 'Canvas is not supported.',
+            }}
+            videoReadyCallback={() => {
+              console.log('Video feed ready.');
+            }}
+        />
         ) : (
           <img src={image} alt="Captured selfie" className="captured-image" />
         )}

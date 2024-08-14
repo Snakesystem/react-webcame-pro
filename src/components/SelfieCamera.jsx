@@ -1,15 +1,9 @@
-import { useState, useRef, useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Camera } from 'react-camera-pro';
-import { Modal, Button } from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
-// import './SelfieCamera.scss'; // Import SCSS file if you have custom styles
+// import './App.scss';
+// import { Camera } from './Camera'; // Pastikan file Camera.js ada dan diimpor dengan benar
 
-const SelfieCamera = () => {
-  const [show, setShow] = useState(false);
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
+const App = () => {
   const [numberOfCameras, setNumberOfCameras] = useState(0);
   const [image, setImage] = useState(null);
   const [showImage, setShowImage] = useState(false);
@@ -17,6 +11,7 @@ const SelfieCamera = () => {
   const [devices, setDevices] = useState([]);
   const [activeDeviceId, setActiveDeviceId] = useState(undefined);
   const [torchToggled, setTorchToggled] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   useEffect(() => {
     const fetchDevices = async () => {
@@ -28,18 +23,34 @@ const SelfieCamera = () => {
     fetchDevices();
   }, []);
 
-  return (
-    <div className="selfie-camera-container">
-      <Button variant="primary" onClick={handleShow}>
-        Open Camera
-      </Button>
+  const enterFullscreen = () => {
+    if (document.documentElement.requestFullscreen) {
+      document.documentElement.requestFullscreen();
+    } else if (document.documentElement.mozRequestFullScreen) { // Firefox
+      document.documentElement.mozRequestFullScreen();
+    } else if (document.documentElement.webkitRequestFullscreen) { // Chrome, Safari and Opera
+      document.documentElement.webkitRequestFullscreen();
+    } else if (document.documentElement.msRequestFullscreen) { // IE/Edge
+      document.documentElement.msRequestFullscreen();
+    }
+    setIsFullscreen(true);
+  };
 
-      <Modal show={show} onHide={handleClose} fullscreen centered>
-        <Modal.Header closeButton>
-          <Modal.Title>Selfie Camera</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-        <div className="wrapper">
+  const exitFullscreen = () => {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.mozCancelFullScreen) { // Firefox
+      document.mozCancelFullScreen();
+    } else if (document.webkitExitFullscreen) { // Chrome, Safari and Opera
+      document.webkitExitFullscreen();
+    } else if (document.msExitFullscreen) { // IE/Edge
+      document.msExitFullscreen();
+    }
+    setIsFullscreen(false);
+  };
+
+  return (
+    <div className={`wrapper ${isFullscreen ? 'fullscreen' : ''}`}>
       {showImage ? (
         <div
           className="fullscreen-image-preview"
@@ -50,7 +61,7 @@ const SelfieCamera = () => {
         <Camera
           ref={camera}
           aspectRatio="cover"
-          facingMode="user"
+          facingMode="environment"
           numberOfCamerasCallback={setNumberOfCameras}
           videoSourceDeviceId={activeDeviceId}
           errorMessages={{
@@ -64,60 +75,67 @@ const SelfieCamera = () => {
           }}
         />
       )}
-    </div>
-      </Modal.Body>
-        <Modal.Footer>
-          <div className="control">
-            <select
-              onChange={(event) => setActiveDeviceId(event.target.value)}
-              value={activeDeviceId}
-            >
-              {devices.map(device => (
-                <option key={device.deviceId} value={device.deviceId}>
-                  {device.label}
-                </option>
-              ))}
-            </select>
-            <div
-              className="image-preview"
-              style={{ backgroundImage: `url(${image})` }}
-              onClick={() => setShowImage(!showImage)}
-            />
-            <button
-              className="take-photo-button"
-              onClick={() => {
-                if (camera.current) {
-                  const photo = camera.current.takePhoto();
-                  console.log(photo);
-                  setImage(photo);
-                }
-              }}
-            />
-            {camera.current?.torchSupported && (
-              <button
-                className={`btn btn-primary ${torchToggled ? 'toggled' : ''}`}
-                onClick={() => {
-                  if (camera.current) {
-                    setTorchToggled(camera.current.toggleTorch());
-                  }
-                }}
-              >cekrek</button>
-            )}
-            <button
-              className="btn btn-secondary"
-              disabled={numberOfCameras <= 1}
-              onClick={() => {
-                if (camera.current) {
-                  const result = camera.current.switchCamera();
-                  console.log(result);
-                }
-              }}
-            >Switch</button>
-          </div>
-        </Modal.Footer>
-      </Modal>
+      <div className="control">
+        <select
+          onChange={(event) => setActiveDeviceId(event.target.value)}
+          value={activeDeviceId}
+        >
+          {devices.map(device => (
+            <option key={device.deviceId} value={device.deviceId}>
+              {device.label}
+            </option>
+          ))}
+        </select>
+        <div
+          className="image-preview"
+          style={{ backgroundImage: `url(${image})` }}
+          onClick={() => setShowImage(!showImage)}
+        />
+        <button
+          className="take-photo-button"
+          onClick={() => {
+            if (camera.current) {
+              const photo = camera.current.takePhoto();
+              console.log(photo);
+              setImage(photo);
+            }
+          }}
+        />
+        {camera.current?.torchSupported && (
+          <button
+            className={`torch-button ${torchToggled ? 'toggled' : ''}`}
+            onClick={() => {
+              if (camera.current) {
+                setTorchToggled(camera.current.toggleTorch());
+              }
+            }}
+          />
+        )}
+        <button
+          className="change-facing-camera-button"
+          disabled={numberOfCameras <= 1}
+          onClick={() => {
+            if (camera.current) {
+              const result = camera.current.switchCamera();
+              console.log(result);
+            }
+          }}
+        />
+      </div>
+      <button
+          className="btn btn-primary"
+          onClick={() => {
+            if (isFullscreen) {
+              exitFullscreen();
+            } else {
+              enterFullscreen();
+            }
+          }}
+        >
+          {isFullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen'}
+        </button>
     </div>
   );
 };
 
-export default SelfieCamera;
+export default App;
