@@ -47,22 +47,22 @@ const CameraPopup = ({ isOpen, onClose }) => {
   return (
     <div className="camera-popup" ref={popupRef}>
       <div className={`popup-content ${orientation}`}>
-      <Camera
-                ref={webcamRef}
-                aspectRatio="cover"
-                facingMode="user"
-                numberOfCamerasCallback={setNumberOfCameras}
-                videoSourceDeviceId={activeDeviceId}
-                errorMessages={{
-                  noCameraAccessible: 'No camera device accessible. Please connect your camera or try a different browser.',
-                  permissionDenied: 'Permission denied. Please refresh and give camera permission.',
-                  switchCamera: 'It is not possible to switch camera to different one because there is only one video device accessible.',
-                  canvas: 'Canvas is not supported.',
-                }}
-                videoReadyCallback={() => {
-                  console.log('Video feed ready.');
-                }}
-              />
+        <Camera
+          ref={webcamRef}
+          aspectRatio="cover"
+          facingMode="user"
+          numberOfCamerasCallback={setNumberOfCameras}
+          videoSourceDeviceId={activeDeviceId}
+          errorMessages={{
+            noCameraAccessible: 'No camera device accessible. Please connect your camera or try a different browser.',
+            permissionDenied: 'Permission denied. Please refresh and give camera permission.',
+            switchCamera: 'It is not possible to switch camera to different one because there is only one video device accessible.',
+            canvas: 'Canvas is not supported.',
+          }}
+          videoReadyCallback={() => {
+            console.log('Video feed ready.');
+          }}
+        />
         <div className="controls">
           <button onClick={onClose} className="btn btn-danger">Close</button>
         </div>

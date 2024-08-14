@@ -22,13 +22,11 @@
   align-items: center;
 }
 
-.webcam {
+video {
   width: 100%;
-  height: auto;
-  max-height: 100%;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  transform: rotate(0deg);
+  height: 100%;
+  object-fit: cover;
+  transform: scale(0.9) !important;
 }
 
 /* Mobile specific styles */
