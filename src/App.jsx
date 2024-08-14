@@ -166,7 +166,7 @@ const App = () => {
           onClick={() => {
             setShowImage(!showImage);
           }}
-        />
+        /> 
       ) : (
         <Camera
           ref={camera}
