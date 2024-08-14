@@ -25,28 +25,38 @@ const App = () => {
     fetchDevices();
   }, []);
 
-  const handleClose = () => {
-    setShowModal(false);
-    if (document.fullscreenElement) {
-      document.exitFullscreen();
+  useEffect(() => {
+    if (showModal && modalRef.current) {
+      const enterFullscreen = async () => {
+        try {
+          if (modalRef.current.requestFullscreen) {
+            await modalRef.current.requestFullscreen();
+          } else if (modalRef.current.mozRequestFullScreen) { // Firefox
+            await modalRef.current.mozRequestFullScreen();
+          } else if (modalRef.current.webkitRequestFullscreen) { // Chrome, Safari and Opera
+            await modalRef.current.webkitRequestFullscreen();
+          } else if (modalRef.current.msRequestFullscreen) { // IE/Edge
+            await modalRef.current.msRequestFullscreen();
+          }
+        } catch (err) {
+          console.error("Error trying to enter fullscreen mode", err);
+        }
+      };
+
+      enterFullscreen();
+
+      // Exit fullscreen if modal is closed
+      return () => {
+        if (document.fullscreenElement) {
+          document.exitFullscreen();
+        }
+      };
     }
-  };
+  }, [showModal]);
+
+  const handleClose = () => setShowModal(false);
 
   const handleShow = () => setShowModal(true);
-
-  const handleFullscreen = () => {
-    if (modalRef.current) {
-      if (modalRef.current.requestFullscreen) {
-        modalRef.current.requestFullscreen();
-      } else if (modalRef.current.mozRequestFullScreen) { // Firefox
-        modalRef.current.mozRequestFullScreen();
-      } else if (modalRef.current.webkitRequestFullscreen) { // Chrome, Safari and Opera
-        modalRef.current.webkitRequestFullscreen();
-      } else if (modalRef.current.msRequestFullscreen) { // IE/Edge
-        modalRef.current.msRequestFullscreen();
-      }
-    }
-  };
 
   return (
     <div className="app">
@@ -61,6 +71,26 @@ const App = () => {
         backdrop="static"
         keyboard={false}
         ref={modalRef}
+        onEntered={() => {
+          if (modalRef.current) {
+            const enterFullscreen = async () => {
+              try {
+                if (modalRef.current.requestFullscreen) {
+                  await modalRef.current.requestFullscreen();
+                } else if (modalRef.current.mozRequestFullScreen) { // Firefox
+                  await modalRef.current.mozRequestFullScreen();
+                } else if (modalRef.current.webkitRequestFullscreen) { // Chrome, Safari and Opera
+                  await modalRef.current.webkitRequestFullscreen();
+                } else if (modalRef.current.msRequestFullscreen) { // IE/Edge
+                  await modalRef.current.msRequestFullscreen();
+                }
+              } catch (err) {
+                console.error("Error trying to enter fullscreen mode", err);
+              }
+            };
+            enterFullscreen();
+          }
+        }}
       >
         <Modal.Header closeButton>
           <Modal.Title>Camera</Modal.Title>
@@ -77,7 +107,7 @@ const App = () => {
               <Camera
                 ref={camera}
                 aspectRatio="cover"
-                facingMode="environment"
+                facingMode="user"
                 numberOfCamerasCallback={setNumberOfCameras}
                 videoSourceDeviceId={activeDeviceId}
                 errorMessages={{
@@ -145,12 +175,6 @@ const App = () => {
               }}
             >
               Switch Camera
-            </Button>
-            <Button
-              className="fullscreen-button"
-              onClick={handleFullscreen}
-            >
-              Fullscreen
             </Button>
           </div>
         </Modal.Footer>
