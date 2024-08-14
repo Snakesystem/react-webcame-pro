@@ -14,7 +14,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(0, 0, 0, 1);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -35,12 +35,29 @@
   video {
     transform: scale(0.5);
   }
+
+  .controls {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    z-index: 99999999999;
+  }
 }
 
 /* Default styles for larger screens (desktop) */
 @media (min-width: 768px) {
-  .webcam {
-    /* Default desktop styles without rotation */
+  .camera-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 50%;
+    height: 50%;
+    background-color: rgba(0, 0, 0, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    overflow: hidden;
   }
 }
 
@@ -48,4 +65,5 @@
   margin-top: 20px;
   display: flex;
   gap: 10px;
+  z-index: 99999999999;
 }
