@@ -48,7 +48,13 @@ const CameraPopup = ({ isOpen, onClose }) => {
   return (
     <div className="camera-popup" ref={popupRef}>
       <div className={`popup-content ${orientation}`}>
-        <Camera
+        {
+          image ? (
+            <div className="">
+              <img src={image} alt="Captured Image" />
+            </div>
+          ) : (
+            <Camera
           ref={camera}
           aspectRatio="cover"
           facingMode="user"
@@ -64,6 +70,8 @@ const CameraPopup = ({ isOpen, onClose }) => {
             console.log('Video feed ready.');
           }}
         />
+          )
+        }
         <div className="controls">
           <button onClick={onClose} className="btn btn-danger">Close</button>
           <button onClick={() => {
