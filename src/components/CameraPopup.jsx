@@ -39,7 +39,7 @@ const CameraPopup = ({ isOpen, onClose }) => {
       }
     }
     return () => {
-      popupRef.current?.exitFullscreen?.();
+      console.log('Cleanup');
     };
   }, [isOpen]);
 
