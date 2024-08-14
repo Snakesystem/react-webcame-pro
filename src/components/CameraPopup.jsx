@@ -51,7 +51,7 @@ const CameraPopup = ({ isOpen, onClose }) => {
         {
           image ? (
             <div className="">
-              <img src={image} alt="Captured Image" />
+              <img src={image} alt="Captured Image" className='fullscreen-image-preview' />
             </div>
           ) : (
             <Camera
