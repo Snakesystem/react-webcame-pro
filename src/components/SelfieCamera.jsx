@@ -34,7 +34,7 @@ const SelfieCamera = () => {
         Open Camera
       </Button>
 
-      <Modal show={show} onHide={handleClose} size="lg" centered>
+      <Modal show={show} onHide={handleClose} fullscreen centered>
         <Modal.Header closeButton>
           <Modal.Title>Selfie Camera</Modal.Title>
         </Modal.Header>
@@ -64,59 +64,56 @@ const SelfieCamera = () => {
           }}
         />
       )}
-      <div className="control">
-        <select
-          onChange={(event) => setActiveDeviceId(event.target.value)}
-          value={activeDeviceId}
-        >
-          {devices.map(device => (
-            <option key={device.deviceId} value={device.deviceId}>
-              {device.label}
-            </option>
-          ))}
-        </select>
-        <div
-          className="image-preview"
-          style={{ backgroundImage: `url(${image})` }}
-          onClick={() => setShowImage(!showImage)}
-        />
-        <button
-          className="take-photo-button"
-          onClick={() => {
-            if (camera.current) {
-              const photo = camera.current.takePhoto();
-              console.log(photo);
-              setImage(photo);
-            }
-          }}
-        />
-        {camera.current?.torchSupported && (
-          <button
-            className={`torch-button ${torchToggled ? 'toggled' : ''}`}
-            onClick={() => {
-              if (camera.current) {
-                setTorchToggled(camera.current.toggleTorch());
-              }
-            }}
-          />
-        )}
-        <button
-          className="change-facing-camera-button"
-          disabled={numberOfCameras <= 1}
-          onClick={() => {
-            if (camera.current) {
-              const result = camera.current.switchCamera();
-              console.log(result);
-            }
-          }}
-        />
-      </div>
     </div>
-        </Modal.Body>
+      </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
+          <div className="control">
+            <select
+              onChange={(event) => setActiveDeviceId(event.target.value)}
+              value={activeDeviceId}
+            >
+              {devices.map(device => (
+                <option key={device.deviceId} value={device.deviceId}>
+                  {device.label}
+                </option>
+              ))}
+            </select>
+            <div
+              className="image-preview"
+              style={{ backgroundImage: `url(${image})` }}
+              onClick={() => setShowImage(!showImage)}
+            />
+            <button
+              className="take-photo-button"
+              onClick={() => {
+                if (camera.current) {
+                  const photo = camera.current.takePhoto();
+                  console.log(photo);
+                  setImage(photo);
+                }
+              }}
+            />
+            {camera.current?.torchSupported && (
+              <button
+                className={`btn btn-primary ${torchToggled ? 'toggled' : ''}`}
+                onClick={() => {
+                  if (camera.current) {
+                    setTorchToggled(camera.current.toggleTorch());
+                  }
+                }}
+              >cekrek</button>
+            )}
+            <button
+              className="btn btn-secondary"
+              disabled={numberOfCameras <= 1}
+              onClick={() => {
+                if (camera.current) {
+                  const result = camera.current.switchCamera();
+                  console.log(result);
+                }
+              }}
+            >Switch</button>
+          </div>
         </Modal.Footer>
       </Modal>
     </div>
