@@ -1,19 +1,22 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import { Camera } from 'react-camera-pro';
 import { Modal, Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-// import './App.scss'; // Pastikan file SCSS diimpor
-import { Camera } from 'react-camera-pro';
+// import './SelfieCamera.scss'; // Import SCSS file if you have custom styles
 
-const App = () => {
+const SelfieCamera = () => {
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
   const [numberOfCameras, setNumberOfCameras] = useState(0);
   const [image, setImage] = useState(null);
   const [showImage, setShowImage] = useState(false);
-  const [showModal, setShowModal] = useState(false);
   const camera = useRef(null);
   const [devices, setDevices] = useState([]);
   const [activeDeviceId, setActiveDeviceId] = useState(undefined);
   const [torchToggled, setTorchToggled] = useState(false);
-  const modalRef = useRef(null);
 
   useEffect(() => {
     const fetchDevices = async () => {
@@ -25,106 +28,46 @@ const App = () => {
     fetchDevices();
   }, []);
 
-  useEffect(() => {
-    if (showModal && modalRef.current) {
-      const enterFullscreen = async () => {
-        try {
-          if (modalRef.current.requestFullscreen) {
-            await modalRef.current.requestFullscreen();
-          } else if (modalRef.current.mozRequestFullScreen) { // Firefox
-            await modalRef.current.mozRequestFullScreen();
-          } else if (modalRef.current.webkitRequestFullscreen) { // Chrome, Safari and Opera
-            await modalRef.current.webkitRequestFullscreen();
-          } else if (modalRef.current.msRequestFullscreen) { // IE/Edge
-            await modalRef.current.msRequestFullscreen();
-          }
-        } catch (err) {
-          console.error("Error trying to enter fullscreen mode", err);
-        }
-      };
-
-      enterFullscreen();
-
-      // Exit fullscreen if modal is closed
-      return () => {
-        if (document.fullscreenElement) {
-          document.exitFullscreen();
-        }
-      };
-    }
-  }, [showModal]);
-
-  const handleClose = () => setShowModal(false);
-
-  const handleShow = () => setShowModal(true);
-
   return (
-    <div className="app">
+    <div className="selfie-camera-container">
       <Button variant="primary" onClick={handleShow}>
         Open Camera
       </Button>
 
-      <Modal
-        show={showModal}
-        onHide={handleClose}
-        dialogClassName="fullscreen-modal"
-        backdrop="static"
-        keyboard={false}
-        ref={modalRef}
-        onEntered={() => {
-          if (modalRef.current) {
-            const enterFullscreen = async () => {
-              try {
-                if (modalRef.current.requestFullscreen) {
-                  await modalRef.current.requestFullscreen();
-                } else if (modalRef.current.mozRequestFullScreen) { // Firefox
-                  await modalRef.current.mozRequestFullScreen();
-                } else if (modalRef.current.webkitRequestFullscreen) { // Chrome, Safari and Opera
-                  await modalRef.current.webkitRequestFullscreen();
-                } else if (modalRef.current.msRequestFullscreen) { // IE/Edge
-                  await modalRef.current.msRequestFullscreen();
-                }
-              } catch (err) {
-                console.error("Error trying to enter fullscreen mode", err);
-              }
-            };
-            enterFullscreen();
-          }
-        }}
-      >
+      <Modal show={show} onHide={handleClose} fullscreen centered>
         <Modal.Header closeButton>
-          <Modal.Title>Camera</Modal.Title>
+          <Modal.Title>Selfie Camera</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div className="camera-container">
-            {showImage ? (
-              <div
-                className="fullscreen-image-preview"
-                style={{ backgroundImage: `url(${image})` }}
-                onClick={() => setShowImage(false)}
-              />
-            ) : (
-              <Camera
-                ref={camera}
-                aspectRatio="cover"
-                facingMode="user"
-                numberOfCamerasCallback={setNumberOfCameras}
-                videoSourceDeviceId={activeDeviceId}
-                errorMessages={{
-                  noCameraAccessible: 'No camera device accessible. Please connect your camera or try a different browser.',
-                  permissionDenied: 'Permission denied. Please refresh and give camera permission.',
-                  switchCamera: 'It is not possible to switch camera to different one because there is only one video device accessible.',
-                  canvas: 'Canvas is not supported.',
-                }}
-                videoReadyCallback={() => {
-                  console.log('Video feed ready.');
-                }}
-              />
-            )}
-          </div>
+        <div className="wrapper">
+      {showImage ? (
+        <div
+          className="fullscreen-image-preview"
+          style={{ backgroundImage: `url(${image})` }}
+          onClick={() => setShowImage(false)}
+        />
+      ) : (
+        <Camera
+          ref={camera}
+          aspectRatio="cover"
+          facingMode="environment"
+          numberOfCamerasCallback={setNumberOfCameras}
+          videoSourceDeviceId={activeDeviceId}
+          errorMessages={{
+            noCameraAccessible: 'No camera device accessible. Please connect your camera or try a different browser.',
+            permissionDenied: 'Permission denied. Please refresh and give camera permission.',
+            switchCamera: 'It is not possible to switch camera to different one because there is only one video device accessible.',
+            canvas: 'Canvas is not supported.',
+          }}
+          videoReadyCallback={() => {
+            console.log('Video feed ready.');
+          }}
+        />
+      )}
+    </div>
         </Modal.Body>
-        <Modal.Footer>
-          <div className="control">
+          <Modal.Footer>
+            <div className="control">
             <select
               onChange={(event) => setActiveDeviceId(event.target.value)}
               value={activeDeviceId}
@@ -140,7 +83,7 @@ const App = () => {
               style={{ backgroundImage: `url(${image})` }}
               onClick={() => setShowImage(!showImage)}
             />
-            <Button
+            <button
               className="take-photo-button"
               onClick={() => {
                 if (camera.current) {
@@ -149,22 +92,18 @@ const App = () => {
                   setImage(photo);
                 }
               }}
-            >
-              Take Photo
-            </Button>
+            />
             {camera.current?.torchSupported && (
-              <Button
+              <button
                 className={`torch-button ${torchToggled ? 'toggled' : ''}`}
                 onClick={() => {
                   if (camera.current) {
                     setTorchToggled(camera.current.toggleTorch());
                   }
                 }}
-              >
-                Toggle Torch
-              </Button>
+              />
             )}
-            <Button
+            <button
               className="change-facing-camera-button"
               disabled={numberOfCameras <= 1}
               onClick={() => {
@@ -173,9 +112,7 @@ const App = () => {
                   console.log(result);
                 }
               }}
-            >
-              Switch Camera
-            </Button>
+            />
           </div>
         </Modal.Footer>
       </Modal>
@@ -183,4 +120,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default SelfieCamera;
