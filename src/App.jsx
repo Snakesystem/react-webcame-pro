@@ -37,7 +37,7 @@ const App = () => {
     <div className="App">
     <h1>Selfie Capture App</h1>
     <button onClick={openCamera} className="btn btn-primary">Open Camera</button>
-    <CameraPopup isOpen={isCameraOpen} onClose={closeCamera} />
+    <CameraPopup isOpen={isCameraOpen} onClose={closeCamera} openCamera={openCamera} />
     {/* <CobaOrientasi /> */}
   </div>
   );

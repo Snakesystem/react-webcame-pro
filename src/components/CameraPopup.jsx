@@ -27,7 +27,7 @@ const CameraButton = () => {
 };
 
 
-const CameraPopup = ({ isOpen, onClose }) => {
+const CameraPopup = ({ isOpen, onClose, openCamera }) => {
   const popupRef = useRef(null);
   const camera = useRef(null);
   const [numberOfCameras, setNumberOfCameras] = useState(0);
@@ -106,15 +106,43 @@ const CameraPopup = ({ isOpen, onClose }) => {
         }
         {/* <CobaOrientasi /> */}
         <div className="controls">
-          <button onClick={onClose} className="btn btn-danger">Close</button>
-          {/* <button onClick={() => {
-            if (camera.current) {
-              const photo = camera.current.takePhoto();
-              console.log(photo);
-              setImage(photo);
-            }
-          }} className="bi bi-camera" style={orientation === 'landscape' ? styleLanscape : stylePortrait}></button> */}
-          <CameraButton />
+          {
+            image ? (
+              <div className="after-capture">
+                <button onClick={() => {
+                  openCamera();
+                  setImage(null);
+                }} className="rounded-circle">
+                  <i className="bi bi-x-circle"></i>
+                </button>
+                <button className="rounded-circle" onClick={() => {
+                  if (camera.current) {
+                    const photo = camera.current.takePhoto();
+                    console.log(photo);
+                    setImage(photo);
+                  }
+                }}>
+                  <i className="bi bi-check-lg"></i>
+                </button>
+              </div>
+            ) : (
+              <div className="before-capture">
+                <button onClick={onClose} className="rounded-circle">
+                  <i className="bi bi-x-circle"></i>
+                </button>
+                <button className="rounded-circle" onClick={() => {
+                  if (camera.current) {
+                    const photo = camera.current.takePhoto();
+                    console.log(photo);
+                    setImage(photo);
+                  }
+                }}>
+                  <i className="bi bi-camera"></i>
+                </button>
+              </div>
+            )
+          }
+
         </div>
       </div>
     </div>
