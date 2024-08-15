@@ -50,14 +50,6 @@
     gap: 10px;
     z-index: 99999999999;
   }
-
-  .rotate-portrait {
-    transform: rotate(0deg);
-  }
-  
-  .rotate-landscape {
-    transform: rotate(90deg);
-  }
   
   @media (orientation: portrait) {
     .rotate-landscape {
@@ -70,14 +62,6 @@
       transform: rotate(90deg);
     }
   }
-}
-
-.rotate-portrait {
-  transform: rotate(0deg);
-}
-
-.rotate-landscape {
-  transform: rotate(90deg);
 }
 
 @media (orientation: portrait) {
