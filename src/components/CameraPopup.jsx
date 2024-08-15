@@ -3,6 +3,30 @@ import Webcam from 'react-webcam';
 import './CameraPopup.scss';
 import { Camera } from 'react-camera-pro';
 
+const CameraButton = () => {
+  const [orientation, setOrientation] = useState(window.innerWidth > window.innerHeight ? 'landscape' : 'portrait');
+
+  const handleResize = () => {
+    setOrientation(window.innerWidth > window.innerHeight ? 'landscape' : 'portrait');
+  };
+
+  useEffect(() => {
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  return (
+    <div className={`d-flex justify-content-center align-items-center min-vh-100 rotate-${orientation}`}>
+      <button className="btn btn-primary rounded-circle">
+        <i className="bi bi-camera"></i>
+      </button>
+    </div>
+  );
+};
+
+
 const CameraPopup = ({ isOpen, onClose }) => {
   const popupRef = useRef(null);
   const camera = useRef(null);
@@ -83,13 +107,14 @@ const CameraPopup = ({ isOpen, onClose }) => {
         {/* <CobaOrientasi /> */}
         <div className="controls">
           <button onClick={onClose} className="btn btn-danger">Close</button>
-          <button onClick={() => {
+          {/* <button onClick={() => {
             if (camera.current) {
               const photo = camera.current.takePhoto();
               console.log(photo);
               setImage(photo);
             }
-          }} className="bi bi-camera" style={orientation === 'landscape' ? styleLanscape : stylePortrait}></button>
+          }} className="bi bi-camera" style={orientation === 'landscape' ? styleLanscape : stylePortrait}></button> */}
+          <CameraButton />
         </div>
       </div>
     </div>
