@@ -104,8 +104,8 @@ const CameraPopup = ({ isOpen, onClose, openCamera }) => {
         />
           )
         }
-        {/* <CobaOrientasi /> */}
-        <div className="controls">
+      </div>
+      <div className="controls">
           {
             image ? (
               <div className="after-capture">
@@ -144,7 +144,6 @@ const CameraPopup = ({ isOpen, onClose, openCamera }) => {
           }
 
         </div>
-      </div>
     </div>
   );
 };
