@@ -60,28 +60,31 @@
 
     .user-camera-serlfie {
       flex: 1; // Make each box take equal width
-      max-width: 100%; // Ensure the boxes are responsive within the container
+      max-width: 150%; // Ensure the boxes are responsive within the container
       display: flex;
       justify-content: end;
       align-items: center;
       transform: rotate(90deg);
-      // background-color: #000000;
+      background-color: #000000;
+      right: 0;
+      margin-right: 1rem;
       img {
-        width: 120%;        // Make images fill the container width
+        width: 150%;        // Make images fill the container width
         height: auto;       // Maintain aspect ratio of images
         max-height: 100%;   // Ensure images do not exceed the box height
+        // background-color: salmon;
       }
     }
   
     .box-idcard {
       flex: 1;               // Allow each box to grow and shrink as needed
-      max-width: 80%;       // Ensure the boxes do not exceed the container width
+      max-width: 100%;       // Ensure the boxes do not exceed the container width
       max-height: 100%;      // Ensure the boxes do not exceed the container height
       display: flex;
       justify-content: center;
       align-items: center;
       transform: rotate(90deg);
-      right: 0;
+      // background-color: aliceblue;
       // overflow: hidden;     // Hide any overflow inside the boxes
       img {
         width: 100%;        // Make images fill the container width
