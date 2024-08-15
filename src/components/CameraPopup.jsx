@@ -35,14 +35,6 @@ const CameraPopup = ({ isOpen, onClose, openCamera }) => {
   const [activeDeviceId, setActiveDeviceId] = useState(undefined);
   const [orientation, setOrientation] = useState(window.innerWidth > window.innerHeight ? 'landscape' : 'portrait');
 
-  const styleLanscape = {
-    transform: 'rotate(0deg)',
-  };
-
-  const stylePortrait = {
-    transform: 'rotate(90deg)',
-  };
-
   const handleResize = () => {
     setOrientation(window.innerWidth > window.innerHeight ? 'landscape' : 'portrait');
   };
@@ -104,6 +96,14 @@ const CameraPopup = ({ isOpen, onClose, openCamera }) => {
         />
           )
         }
+        <div className="watermark-camera">
+          <div className="box-idcard">
+            <img src="/overlay.png" alt="User" />
+          </div>
+          <div className="user-camera-serlfie">
+            <img src="/face-overlay.png" alt="User" />
+          </div>
+        </div>
       </div>
       <div className="controls">
           {

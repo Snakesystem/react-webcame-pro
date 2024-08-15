@@ -45,6 +45,52 @@
     transform: rotate(180deg) rotateX(180deg);
   }
 
+  .watermark-camera {
+    z-index: 9999999999999999999;
+    display: flex;
+    flex-direction: column; // Use column direction for stacking items vertically
+    justify-content: space-between; // Center items horizontally
+    align-items: center;     // Center items vertically
+    gap: 1rem;               // Space between items
+    padding: 5rem;
+    position: relative;      // Ensure positioning context for children if needed
+    width: 100%;             // Ensure the container takes full width
+    height: 100%;       
+    // background-color: aqua;
+
+    .user-camera-serlfie {
+      flex: 1; // Make each box take equal width
+      max-width: 100%; // Ensure the boxes are responsive within the container
+      display: flex;
+      justify-content: end;
+      align-items: center;
+      transform: rotate(90deg);
+      // background-color: #000000;
+      img {
+        width: 120%;        // Make images fill the container width
+        height: auto;       // Maintain aspect ratio of images
+        max-height: 100%;   // Ensure images do not exceed the box height
+      }
+    }
+  
+    .box-idcard {
+      flex: 1;               // Allow each box to grow and shrink as needed
+      max-width: 80%;       // Ensure the boxes do not exceed the container width
+      max-height: 100%;      // Ensure the boxes do not exceed the container height
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transform: rotate(90deg);
+      right: 0;
+      // overflow: hidden;     // Hide any overflow inside the boxes
+      img {
+        width: 100%;        // Make images fill the container width
+        height: auto;       // Maintain aspect ratio of images
+        max-height: 100%;   // Ensure images do not exceed the box height
+      }
+    }
+  }
+
   .controls {
     // background-color: rgba($color: #fff, $alpha: 0.5);
     position: absolute;
