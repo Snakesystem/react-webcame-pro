@@ -16,23 +16,3 @@
   }
 
   /* styles.css */
-
-.rotate-portrait {
-  transform: rotate(0deg);
-}
-
-.rotate-landscape {
-  transform: rotate(90deg);
-}
-
-@media (orientation: portrait) {
-  .rotate-landscape {
-    transform: rotate(0deg);
-  }
-}
-
-@media (orientation: landscape) {
-  .rotate-portrait {
-    transform: rotate(90deg);
-  }
-}
