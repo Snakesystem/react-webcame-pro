@@ -11,6 +11,14 @@ const CameraPopup = ({ isOpen, onClose }) => {
   const [activeDeviceId, setActiveDeviceId] = useState(undefined);
   const [orientation, setOrientation] = useState(window.innerWidth > window.innerHeight ? 'landscape' : 'portrait');
 
+  const styleLanscape = {
+    transform: 'rotate(0deg)',
+  };
+
+  const stylePortrait = {
+    transform: 'rotate(90deg)',
+  };
+
   const handleResize = () => {
     setOrientation(window.innerWidth > window.innerHeight ? 'landscape' : 'portrait');
   };
@@ -72,15 +80,16 @@ const CameraPopup = ({ isOpen, onClose }) => {
         />
           )
         }
+        {/* <CobaOrientasi /> */}
         <div className="controls">
           <button onClick={onClose} className="btn btn-danger">Close</button>
           <button onClick={() => {
-                if (camera.current) {
-                  const photo = camera.current.takePhoto();
-                  console.log(photo);
-                  setImage(photo);
-                }
-              }} className="btn btn-primary" >Capture</button>
+            if (camera.current) {
+              const photo = camera.current.takePhoto();
+              console.log(photo);
+              setImage(photo);
+            }
+          }} className="bi bi-camera" style={orientation === 'landscape' ? styleLanscape : stylePortrait}></button>
         </div>
       </div>
     </div>
