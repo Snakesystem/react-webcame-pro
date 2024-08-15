@@ -47,13 +47,11 @@
   .controls {
     background-color: rgba($color: #000000, $alpha: 0.5);
     position: absolute;
-    height: 100%;
-    margin-bottom: 20px;
+    width: 100%;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
-    right: 0;
-    left: 80%;
+    flex-direction: row;
+    bottom: 0;
     display: flex;
     z-index: 99999999999;
     
@@ -61,13 +59,14 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      flex-direction: column;
+      flex-direction: row;
       gap: 10px;
       button {
         width: 70px;
         height: 70px;
         background-color: rgba($color: #000000, $alpha: 0.7);
         border: none;
+        transform: rotate(90deg);
   
         i {
           color: white;
@@ -79,13 +78,14 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      flex-direction: column;
+      flex-direction: row;
       gap: 10px;
       button {
         width: 70px;
         height: 70px;
         background-color: rgba($color: #000000, $alpha: 0.7);
         border: none;
+        transform: rotate(90deg);
   
         i {
           color: white;
